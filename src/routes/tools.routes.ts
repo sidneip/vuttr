@@ -27,14 +27,14 @@ toolsRouter.post('/', async (request: Request, response: Response) => {
   response.status(201).json(tool)
 })
 
-toolsRouter.delete('/:title', (request: Request, response: Response) => {
-  const {title} = request.params
-  const indexToolToRemove = tools.findIndex( tool => tool.title == title)
-  if(indexToolToRemove > -1){
-    tools.splice(indexToolToRemove, 1)
-    response.status(201).json(tools)
+toolsRouter.delete('/:id', async (request: Request, response: Response) => {
+  const {id} = request.params
+  const toolsRepository = getCustomRepository(ToolsRepository)
+  const toolDestroy = await toolsRepository.createQueryBuilder().delete().from(Tool).where("id = :id", {id: id}).execute()
+  if(toolDestroy && toolDestroy.affected! > 0){
+    return response.status(204).json({})
   }else{
-    response.status(404)
+    return response.status(404).json({})
   }
 })
 
