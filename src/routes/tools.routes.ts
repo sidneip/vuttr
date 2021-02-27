@@ -30,7 +30,7 @@ toolsRouter.post('/', async (request: Request, response: Response) => {
 toolsRouter.delete('/:id', async (request: Request, response: Response) => {
   const {id} = request.params
   const toolsRepository = getCustomRepository(ToolsRepository)
-  const toolDestroy = await toolsRepository.createQueryBuilder().delete().from(Tool).where("id = :id", {id: id}).execute()
+  const toolDestroy = await toolsRepository.delete(id)
   if(toolDestroy && toolDestroy.affected! > 0){
     return response.status(204).json({})
   }else{
