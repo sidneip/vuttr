@@ -1,10 +1,10 @@
 import {uuid} from 'uuidv4'
-import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm'
+import {PrimaryColumn,Column, Entity, PrimaryGeneratedColumn, CreateDateColumn} from 'typeorm'
 @Entity('tools')
 class Tool {
   @PrimaryGeneratedColumn('uuid')
-  @Column()
-  uuid: string;
+  @PrimaryColumn()
+  id: string;
   @Column()
   title: string;
   @Column()
@@ -13,7 +13,7 @@ class Tool {
   description: string;
   @Column('jsonb')
   tags: string[]
-  @Column('timestamp with date time')
+  @CreateDateColumn()
   created_at: Date
 }
 

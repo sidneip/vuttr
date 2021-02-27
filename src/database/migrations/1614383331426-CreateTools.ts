@@ -11,7 +11,8 @@ export class CreateTools1614383331426 implements MigrationInterface {
                         name: 'id',
                         type: 'varchar',
                         isPrimary: true,
-                        generationStrategy: 'uuid'
+                        generationStrategy: 'uuid',
+                        default: 'uuid_generate_v4()'
                     },
                     {
                         name: 'title',
@@ -31,7 +32,8 @@ export class CreateTools1614383331426 implements MigrationInterface {
                     {
                         name: 'created_at',
                         type: 'timestamp with time zone',
-                        isNullable: false
+                        isNullable: false,
+                        default: 'now()'
                     },
                     {
                         name: 'tags',

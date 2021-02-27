@@ -1,27 +1,29 @@
 import { Router, Request, Response } from 'express';
 import Tool from '../models/Tool'
+import {getCustomRepository, Like} from 'typeorm'
+import ToolsRepository from '../repositories/ToolsRepository'
 const toolsRouter = Router();
 
 
 const tools : Array<Tool> = [];
 
-toolsRouter.get('/', (request: Request, response: Response) => {
+toolsRouter.get('/', async (request: Request, response: Response) => {
+  const toolsRepository = getCustomRepository(ToolsRepository)
   const tagSearch = request.query.tag
   if(tagSearch){
-    const toolsFilter = tools.filter( (tool: ToolInterface) => {
-      return tool.tags.includes(tagSearch)
-    })
+    const toolsFilter = await toolsRepository.createQueryBuilder('tools').where('tools.tags::text LIKE :tag', {tag: `%${tagSearch}%`}).getMany()
     return response.json(toolsFilter)
   }else{
-    return response.json(tools)
+    const toolsResult = await toolsRepository.find()
+    return response.json(toolsResult)
   }
 })
 
-toolsRouter.post('/', (request: Request, response: Response) => {
+toolsRouter.post('/', async (request: Request, response: Response) => {
   const {title, link, description, tags} = request.body;
-
-  const tool = new Tool(title, link, description, tags);
-  tools.push(tool);
+  const toolsRepository = getCustomRepository(ToolsRepository)
+  const tool = toolsRepository.create({title, link, description, tags});
+  await toolsRepository.save(tool)
   response.status(201).json(tool)
 })
 
