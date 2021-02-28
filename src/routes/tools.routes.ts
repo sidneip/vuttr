@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import Tool from '../models/Tool'
 import {getCustomRepository, Like} from 'typeorm'
 import ToolsRepository from '../repositories/ToolsRepository'
+import AppError from '../errors/AppError'
 const toolsRouter = Router();
 
 
